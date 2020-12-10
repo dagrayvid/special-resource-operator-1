@@ -1,0 +1,30 @@
+name: OpenShift - Tests
+
+env:
+  REGISTRY: quay.io/openshift-psap
+  REGISTRY_USER: ${{ secrets.QUAY_USERNAME }}
+  REGISTRY_PASSWORD: ${{ secrets.QUAY_PASSWORD }}
+
+
+  OPENSHIFT_SERVER: ${{ secrets.OPENSHIFT_SERVER }}
+  OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }}
+
+on: push
+
+jobs: 
+  openshift-ci-cd:
+    name: Build and deploy to OpenShift
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Determine name
+      run: | 
+        echo "NAME=$(basename $PWD)" | tee -a $GITHUB_ENV
+
+    - name: Determine Tag
+      run: | 
+        echo "TAG=${git branch | grep \* | cut -d ' ' -f2}" | tee -a $GITHUB_ENV
+    
+#    - name: Build From Dockerfile
