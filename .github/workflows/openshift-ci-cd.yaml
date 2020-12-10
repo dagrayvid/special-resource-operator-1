@@ -16,8 +16,13 @@ jobs:
     name: Build and deploy to OpenShift
     runs-on: ubuntu-latest
 
+
     steps:
     - uses: actions/checkout@v2
+
+    - name: Check Local Storage
+      run: | 
+        sudo df -h
 
     - name: Local Image Build
       run: | 
