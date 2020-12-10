@@ -104,7 +104,7 @@ generate: controller-gen
 
 # Build the docker image
 local-image-build: test manifests
-	podman build --no-cache . -t ${IMG}
+	podman build -f Dockerfile.ubi8 --no-cache . -t ${IMG} 
 
 # Push the docker image
 local-image-push:
