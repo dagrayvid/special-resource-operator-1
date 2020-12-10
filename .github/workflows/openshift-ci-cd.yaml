@@ -22,7 +22,32 @@ jobs:
     - name: Local Image Build
       run: | 
         make local-image-build
-        
-
     
-#    - name: Build From Dockerfile
+    - name: Podman Login
+      run: |
+        podman login -u ${{ secrets.QUAY_USERNAME }} -p ${{ secrets.QUAY_PASSWORD }}
+    
+    - name: Local Image push
+      run: | 
+        make local-image-push
+
+    - name: Log in to OpenShift
+      uses: redhat-actions/oc-login@v1
+      with:
+        openshift_server_url: ${{ env.OPENSHIFT_SERVER }}
+        openshift_token: ${{ env.OPENSHIFT_TOKEN }}
+        insecure_skip_tls_verify: true
+        namespace: default
+
+    - name: Reploy SRO
+      run: | 
+        make undeploy
+        make deploy
+
+    - name: Check conditions
+      run: | 
+        oc get clusteroperator special-resource-operator
+
+    - name: Deploy driver-container-base
+      run: | 
+        make
