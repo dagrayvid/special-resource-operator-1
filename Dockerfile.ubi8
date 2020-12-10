@@ -22,7 +22,7 @@ COPY vendor/ vendor/
 # Build
 RUN CGO_ENABLED=0 GO111MODULE=on go build -mod=vendor -a -o manager main.go
 
-FROM registry.access.redhat.com/ubi8/ubi-minimal
+FROM registry.access.redhat.com/ubi8/ubi
 WORKDIR /
 COPY --from=builder /workspace/manager .
 
